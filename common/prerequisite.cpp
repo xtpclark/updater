@@ -300,10 +300,30 @@ bool Prerequisite::met(QString &errMsg)
 
     case License:
       {
+      bool headlessUpdate = false;
+      XSqlQuery metricCheck;
+      metricCheck.prepare("SELECT metric_value FROM metric WHERE metric_name='headlessUpdate';");
+      metricCheck.exec();
+      if(metricCheck.first())
+      {
+          headlessUpdate = metricCheck.value("metric_value").toBool();
+      }
+      else if (metricCheck.lastError().type() != QSqlError::NoError)
+      {
+          errMsg = _sqlerrtxt.arg(metricCheck.lastError().databaseText())
+                             .arg(metricCheck.lastError().driverText());
+      }
+      if(!headlessUpdate)
+      {
       LicenseWindow newdlg(_message);
       returnVal = (newdlg.exec() == QDialog::Accepted);
       if (! returnVal)
         errMsg = TR("The user declined to accept the usage license.");
+      }
+      else
+      {
+          returnVal = true;
+      }
       break;
       }
 
