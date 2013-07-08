@@ -30,20 +30,20 @@ exists($${OPENRPT_DIR}-build-desktop) {
 exists(../../../xtuple) {
   XTUPLE_DIR = ../../xtuple
 }
-exists(../../../xtuple/trunk) {
-  XTUPLE_DIR = ../../xtuple/trunk
+exists(../../../qt-client) {
+  XTUPLE_DIR = ../../qt-client
 }
 exists(../../xtuple) {
   XTUPLE_DIR = ../../xtuple
 }
-exists(../../xtuple/trunk) {
-  XTUPLE_DIR = ../../xtuple/trunk
+exists(../../qt-client) {
+  XTUPLE_DIR = ../../qt-client
 }
 exists(../xtuple) {
   XTUPLE_DIR = ../xtuple
 }
-exists(../xtuple/trunk) {
-  XTUPLE_DIR = ../xtuple/trunk
+exists(../qt-client) {
+  XTUPLE_DIR = ../qt-client
 }
 
 XTUPLE_BLD=$${XTUPLE_DIR}
