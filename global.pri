@@ -8,12 +8,6 @@
 # to be bound by its terms.
 #
 
-exists(../../../openrpt) {
-  OPENRPT_DIR = ../../../openrpt
-}
-exists(../../openrpt) {
-  OPENRPT_DIR = ../../openrpt
-}
 exists(../openrpt) {
   OPENRPT_DIR = ../openrpt
 }
@@ -27,18 +21,6 @@ exists($${OPENRPT_DIR}-build-desktop) {
   OPENRPT_BLD=$${OPENRPT_DIR}-build-desktop
 }
 
-exists(../../../xtuple) {
-  XTUPLE_DIR = ../../xtuple
-}
-exists(../../../qt-client) {
-  XTUPLE_DIR = ../../qt-client
-}
-exists(../../xtuple) {
-  XTUPLE_DIR = ../../xtuple
-}
-exists(../../qt-client) {
-  XTUPLE_DIR = ../../qt-client
-}
 exists(../xtuple) {
   XTUPLE_DIR = ../xtuple
 }
