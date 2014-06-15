@@ -1,6 +1,6 @@
 #!/bin/bash 
 #
-# xtuple_autoupdater: 1.0
+# xtuple_autoupdater: 1.1
 # Author: danderson@xtuple.com
 #
 # The script initiates installation of xTuple installer packages (.gz) across multiple systems.
@@ -8,7 +8,7 @@
 # This script requires xTuple Updater of at least 2.2.5 with the headless update built in
 # and the xTuple systems must have the metric headlessUpdate set to true (t)
 
-# Example:xtuple_autoupdater database_file 
+# Example:xtuple_autoupdater l directorylocation database_file 
 #         
 
  
@@ -24,6 +24,9 @@ usage()
     echo "       PLEASE NOTE: The target xTuple systems must have the headlessUpdate metric installed and set to TRUE"
     echo "       	      This script also assumes the admin user has the same password in all target databases"
     echo
+    echo "       The script assumes the packages will run in alphabetical order based on a directory listing. " 
+    echo "       If dependencies are required in the order packages must be loaded the list the package names in a "
+    echo "       file called packagelist.txt  "
 }
 
 runupdater()
@@ -43,6 +46,7 @@ runupdater()
 # Set default values for variables 
 VERBOSE=0
 DATABASELIST=
+PACKAGELIST=": No packages found"
 ADMINUSER="admin"
 UPDATERLOCATION=/opt/updater-headless
 LOCATION=`pwd`
@@ -74,13 +78,24 @@ read -s -p "Please enter the Admin database password:" PASSWORD
 echo 
 echo "Loading xTuple packages from ${LOCATION}"
 
-if [ ${LOCATION: -1} -eq "/" ]; then 
-  PACKAGELIST=`ls -L ${LOCATION}*.gz`
-else  
-  PACKAGELIST=`ls -L ${LOCATION}/*.gz`
+# Read list of packages to load either from packagelist.txt or directly
+# from the LOCATION directory
+if [ ${LOCATION: -1} == "/" ]; then 
+  LOCATION=`expr "$LOCATION" : "\\(.*\\)/"`
 fi
 
-echo "Packages Found " ${PACKAGELIST}  
+LOCFILE="${LOCATION}/packagelist.txt"
+
+if [ -f ${LOCFILE} ]; then
+  echo "Reading packagelist file"
+  PACKAGELIST=`sed -e "s/#.*//" "$LOCATION"/packagelist.txt`
+else
+  echo "No packagelist file found.  Reading packages directly from ${LOCATION}"
+  PACKAGELIST=`ls -L "$LOCATION"/*.gz`
+fi
+
+echo "Packages Found " ${PACKAGELIST}
+
 echo ${PACKAGELIST} >> xtuple_update.log
 
 # Start running
@@ -111,5 +126,8 @@ if [ ! -d "${LOCATION}/done" ]; then
 fi
 
 mv ${LOCATION}/*.gz ${LOCATION}/done
+
+echo -e "==================================================================
+Update Completed.  Please check the log for errors" >> xtuple_update.log
 
 #EOF
