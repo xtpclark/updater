@@ -11,6 +11,8 @@
 # Example:xtuple_autoupdater l directorylocation database_file 
 #         
 
+# If running headless on a server with out a GUI or XServer
+# Please apt-get/yum Xvfb package to the server, other Desktop/X libraries may be needed.
  
 usage()
 {
@@ -37,8 +39,17 @@ runupdater()
     local PACKAGEFILE=$4;
     echo -e "Updating System: ${DBURL} with package ${PACKAGEFILE}
 ==================================================================" >> xtuple_update.log
+## Still need to have X libraries to run headless QT program
+## Since each updater is applied as it's own process, need to launch Xvfb for each iteration
+Xvfb &
+XVPID=\`pidof Xvfb\`
+export DISPLAY=:0
  
     ${UPDATERLOCATION}/updater -databaseURL=${DBURL} -username=${USERNAME} -passwd=${PASSWORD} -autorun -file=${PACKAGEFILE} >> xtuple_update.log ;
+
+# Kill the Xvfb process.
+kill -KILL \`pidof Xvfb\`
+
 }
 
 #=====================================Main Script========================================

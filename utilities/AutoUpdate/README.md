@@ -17,6 +17,7 @@ No Warrantees or Guarantees are implied in this script.  Use at your own risk.
 ======================================
 INSTRUCTIONS
 ======================================
+* Requires X libraries and Xvfb for headless operation on a machine without gui/Xserver
 
 1] You must use the version of xTuple Updater that allows the headless flag to be utilized
 2] Each target system must have the metric headlessUpdate set to true (t)
